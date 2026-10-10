@@ -1,0 +1,905 @@
+
+ETHICAL HACKING
+SEA-2 COMPLETE PRACTICAL HANDBOOK
+
+12 Labs • CO1–CO6 • Step-by-Step • Command Explanations • Expected Output
+Troubleshooting • Evidence • Viva • Exam Tips
+
+Authorized Academic Laboratory Use Only
+
+This handbook is designed for the 3-hour SEA-2 practical examination and follows the course sequence: isolated lab setup and Linux security, service/traffic analysis, reconnaissance and vulnerability assessment, controlled exploitation, post-exploitation/pivoting, and professional reporting.
+Safety rule: perform all active scanning, password testing, exploitation and pivoting only against the instructor-assigned isolated virtual machines. Replace placeholders such as <TARGET_IP> with the IP assigned in the lab.
+SEA-2 Lab Map
+Lab	Title	CO
+1	Build and Configure an Isolated Ethical Hacking Lab using Kali Linux and Metasploitable 2	CO1
+2	Linux Security Administration, File Permissions, SUID/SGID and Bash Automation	CO1
+3	Network Service Enumeration and Banner Grabbing using Nmap and Linux Utilities	CO2
+4	Network Traffic Capture and Protocol Analysis using Wireshark and tcpdump	CO2
+5	Footprinting, OSINT, DNS Enumeration and Attack-Surface Mapping	CO3
+6	Host Discovery, Port Scanning, Service/OS Detection and NSE Scanning using Nmap	CO3
+7	Vulnerability Assessment using Nikto, Nuclei and Nessus/OpenVAS with CVE & CVSS Analysis	CO3
+8	Controlled Exploitation of a Vulnerable Host using Metasploit Framework	CO4
+9	Password Security Assessment using Hydra, John the Ripper/Hashcat and Wordlists	CO4
+10	Post-Exploitation Enumeration and Linux Privilege-Escalation Assessment using linPEAS	CO5
+11	Multi-Host Pivoting and Post-Exploitation CTF in an Isolated Lab Environment	CO5
+12	End-to-End Ethical Hacking Assessment and Professional Vulnerability Report Preparation	CO6
+
+
+LAB 1 — Build and Configure an Isolated Ethical Hacking Lab using Kali Linux and Metasploitable 2
+Mapped Course Outcome: CO1
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Build a safe, isolated penetration-testing environment using Kali Linux and Metasploitable 2, verify network connectivity, create snapshots, and prepare an engagement workspace.
+Concept / Theory
+Virtualization lets students reproduce attacks without touching production systems. Host-Only networking allows communication between selected VMs and the host while keeping the target isolated from the wider network. NAT is useful for Internet access but should not be the only interface used for an isolated attacker-target exercise.
+Item	Details
+Attacker	Kali Linux
+Target	Metasploitable 2
+Recommended lab network	VirtualBox Host-Only / Internal Network
+Example subnet	192.168.56.0/24
+Evidence	IP addresses, ping result, VM network settings, snapshot
+Software / Requirements
+Oracle VirtualBox or VMware
+Kali Linux VM
+Metasploitable 2 VM
+At least 4 GB host RAM available for the two VMs
+Step-by-Step Procedure
+1.Power off both VMs before changing virtual NIC settings.
+2.Configure Kali Adapter 1 and Metasploitable Adapter 1 on the same Host-Only network. If Kali needs Internet access, add NAT as a separate adapter.
+3.Boot both systems and identify their addresses.
+ip addr
+ip route
+ifconfig
+From Kali, test the target. Replace the placeholder with the actual Metasploitable address.
+ping -c 4 <TARGET_IP>
+Create the exam workspace:
+mkdir -p ~/sea2-lab/{recon,scans,evidence,reports}
+tree ~/sea2-lab 2>/dev/null || find ~/sea2-lab -maxdepth 2 -type d
+4.Create a clean snapshot of both VMs and name it clearly, for example SEA2-Clean-State.
+5.Record attacker IP, target IP, subnet and adapter mode in the lab record.
+Important Commands and Meaning
+Command / Filter	Purpose
+ip addr	Displays interfaces and assigned IP addresses.
+ip route	Shows the routing table and default gateway.
+ifconfig	Legacy interface display command, useful on Metasploitable 2.
+ping -c 4 IP	Sends four ICMP echo requests to verify reachability.
+mkdir -p	Creates the complete directory structure if it does not already exist.
+Expected Output / Interpretation
+Kali and Metasploitable have addresses in the intended isolated subnet.
+Four ICMP replies indicate basic Layer-3 connectivity.
+The workspace contains recon, scans, evidence and reports folders.
+Evidence to Capture
+VirtualBox network settings
+Kali `ip addr` output
+Target `ifconfig` output
+Successful ping
+Snapshot name
+Common Errors and Troubleshooting
+Problem	Check / Fix
+No IP address	Check that the virtual cable is connected and both VMs use the same Host-Only/Internal network.
+Ping fails	Verify IP/subnet, adapter mode and that the target is powered on.
+Duplicate IP	Assign unique static addresses or renew the DHCP lease.
+Likely Viva Questions
+1. Why is Host-Only preferred for a vulnerable target?
+2. What is the difference between NAT and Host-Only networking?
+3. What does a /24 subnet mean?
+4. Why should a snapshot be created before testing?
+5. What information does `ip route` provide?
+Exam Tips
+Always confirm the target IP before scanning.
+Do not expose Metasploitable directly to a public/college network.
+Write the topology before starting commands.
+Result
+An isolated ethical hacking lab was created, connectivity was verified, and a clean recovery snapshot and engagement workspace were prepared.
+
+
+LAB 2 — Linux Security Administration, File Permissions, SUID/SGID and Bash Automation
+Mapped Course Outcome: CO1
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Perform Linux security administration tasks, interpret Unix permissions and SUID/SGID, inspect processes/services/logs, and create a small Bash security-audit script.
+Concept / Theory
+Linux permissions are expressed for owner, group and others. Read=4, write=2 and execute=1. SUID causes an executable to run with the file owner's effective identity; SGID can apply the file's group identity. These features are legitimate but become security concerns when applied to inappropriate or writable programs.
+Software / Requirements
+Kali Linux or another Linux lab VM
+Bash
+Standard utilities: chmod, find, ps, ss/netstat, journalctl or log files
+Step-by-Step Procedure
+whoami
+id
+pwd
+ls -la
+Create a practice file and change its permissions:
+mkdir -p ~/sea2-permissions && cd ~/sea2-permissions
+touch sample.txt && chmod 640 sample.txt && ls -l sample.txt
+Interpret 640 as owner read/write, group read, others no permission.
+find / -perm -4000 -type f 2>/dev/null
+find / -perm -2000 -type f 2>/dev/null
+ps aux | head -20
+ss -tulpn 2>/dev/null || netstat -tulpn
+journalctl -n 20 2>/dev/null || tail -n 20 /var/log/syslog 2>/dev/null
+Create a simple audit script:
+nano ~/sea2-audit.sh
+Suggested script content:
+#!/bin/bash
+echo "=== BASIC SECURITY AUDIT ==="
+date
+hostname
+id
+echo "--- Disk ---"
+df -h
+echo "--- Listening Services ---"
+ss -tulpn 2>/dev/null || netstat -tulpn
+echo "--- Recent Logins ---"
+last -n 5
+chmod +x ~/sea2-audit.sh
+~/sea2-audit.sh | tee ~/sea2-lab/evidence/linux-audit.txt
+Important Commands and Meaning
+Command / Filter	Purpose
+chmod 640 file	Sets rw-r----- permissions.
+find / -perm -4000	Finds SUID executables.
+ps aux	Lists processes from all users.
+ss -tulpn	Shows listening TCP/UDP sockets and processes.
+tee file	Displays output while also saving it.
+chmod +x script	Adds executable permission.
+Expected Output / Interpretation
+`ls -l` displays the changed mode.
+SUID/SGID searches return privileged files for review.
+Process/service output identifies running components.
+The Bash script produces a reusable audit record.
+Evidence to Capture
+Permission output
+SUID/SGID listing
+Listening services
+Audit script and saved output
+Common Errors and Troubleshooting
+Problem	Check / Fix
+Permission denied during find	Expected on protected paths; redirect errors with `2>/dev/null`.
+ss not installed	Use `netstat -tulpn`.
+Script will not execute	Check `chmod +x` and the shebang.
+journalctl unavailable	Inspect `/var/log/` files instead.
+Likely Viva Questions
+1. What do 6, 4 and 0 mean in `chmod 640`?
+2. What is SUID?
+3. Why can a writable SUID program be risky?
+4. What is the difference between a process and a service?
+5. What does `2>/dev/null` do?
+Exam Tips
+Explain permissions instead of only showing commands.
+Do not assume every SUID file is vulnerable.
+Be ready to explain one line of your Bash script.
+Result
+Linux permissions, privileged-file indicators, processes and services were analyzed, and a Bash security-audit script was executed successfully.
+
+
+LAB 3 — Network Service Enumeration and Banner Grabbing using Nmap and Linux Utilities
+Mapped Course Outcome: CO2
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Identify exposed TCP services, versions and banners on the assigned vulnerable target.
+Concept / Theory
+A port identifies a network endpoint. An open port usually indicates a listening service. Enumeration goes beyond discovering the port: it attempts to identify the protocol, software and version so that exposure and patch status can be assessed.
+Software / Requirements
+Kali Linux
+Metasploitable 2
+Nmap
+curl and netcat
+Step-by-Step Procedure
+ping -c 3 <TARGET_IP>
+nmap <TARGET_IP>
+nmap -sV <TARGET_IP>
+nmap -sC -sV <TARGET_IP>
+nmap -sV -oN ~/sea2-lab/scans/service-enum.txt <TARGET_IP>
+If HTTP is open:
+curl -I http://<TARGET_IP>
+For a trainer-assigned open port, observe the banner:
+nc -nv <TARGET_IP> <PORT>
+Important Commands and Meaning
+Command / Filter	Purpose
+nmap IP	Default TCP scan of common ports.
+-sV	Service/version detection.
+-sC	Runs Nmap default NSE scripts.
+-oN file	Saves normal-format output.
+curl -I URL	Requests HTTP response headers.
+nc -nv IP PORT	Opens a basic TCP connection for banner observation.
+Expected Output / Interpretation
+Nmap reports PORT/STATE/SERVICE columns.
+`-sV` adds version information when fingerprints are available.
+HTTP headers may reveal server software and response metadata.
+Evidence to Capture
+Basic scan
+Version scan
+Saved scan file
+One banner/header observation
+Common Errors and Troubleshooting
+Problem	Check / Fix
+Host appears down	Confirm ping/connectivity; in a controlled lab `-Pn` may be used if ICMP is blocked.
+No version detected	Service may not expose a recognizable banner; document as unknown.
+Connection refused	The selected port is closed or service stopped.
+Likely Viva Questions
+1. What is banner grabbing?
+2. What is the difference between an open and closed port?
+3. What does `-sV` do?
+4. Why is version information useful?
+5. Why should scanner results be validated?
+Exam Tips
+Read the service/version column carefully.
+Do not claim a vulnerability merely because a version looks old.
+Save scan output for your report.
+Result
+Network services, versions and available banners were enumerated and documented.
+
+
+LAB 4 — Network Traffic Capture and Protocol Analysis using Wireshark and tcpdump
+Mapped Course Outcome: CO2
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Capture and inspect packets using Wireshark and tcpdump, apply filters, and interpret common protocol fields.
+Concept / Theory
+Packet capture provides direct evidence of network communication. Capture filters decide what is collected; display filters decide what Wireshark shows after capture. Cleartext protocols may expose application data, while encrypted protocols protect payload confidentiality.
+Software / Requirements
+Kali Linux
+Wireshark
+tcpdump
+Authorized lab target
+Step-by-Step Procedure
+6.Open Wireshark and select the interface connected to the isolated lab.
+7.Start capture, then generate ICMP and HTTP traffic.
+ping -c 4 <TARGET_IP>
+curl http://<TARGET_IP>
+Apply these Wireshark display filters one at a time:
+icmp
+tcp
+http
+dns
+ip.addr == <TARGET_IP>
+8.Select a packet and inspect Ethernet, IP, TCP/UDP and application-layer sections.
+9.Record source IP, destination IP, source/destination port, flags and protocol.
+sudo tcpdump -i <INTERFACE> -nn host <TARGET_IP>
+sudo tcpdump -i <INTERFACE> -nn -c 50 -w ~/sea2-lab/evidence/lab4.pcap host <TARGET_IP>
+10.Stop capture and open the saved PCAP in Wireshark.
+11.Compare what is visible in cleartext HTTP with what would normally be hidden inside HTTPS encryption.
+Important Filters and Meaning
+Command / Filter	Purpose
+icmp	Shows ICMP packets.
+tcp	Shows TCP packets.
+http	Shows HTTP traffic recognized by Wireshark.
+dns	Shows DNS queries/responses.
+ip.addr == X	Shows packets where X is source or destination.
+tcp.port == 80	Shows TCP packets involving port 80.
+Expected Output / Interpretation
+ICMP request/reply pairs are visible.
+TCP packets show port numbers and flags.
+HTTP traffic may expose request/response details in the lab.
+A PCAP file can be reopened for later analysis.
+Evidence to Capture
+Wireshark capture
+Filtered ICMP/TCP/HTTP view
+Packet-details pane
+Saved PCAP
+Common Errors and Troubleshooting
+Problem	Check / Fix
+No packets visible	Verify the correct interface and generate traffic after capture starts.
+Permission error in tcpdump	Run with sudo.
+HTTP filter empty	The target may not have received HTTP traffic; verify with curl.
+Too much traffic	Use a host or protocol filter.
+Likely Viva Questions
+1. Capture filter vs display filter?
+2. What are SYN and ACK?
+3. Why is HTTP less confidential than HTTPS?
+4. What is a PCAP file?
+5. Why use `-nn` with tcpdump?
+Exam Tips
+Know at least five display filters.
+Explain one packet from Layer 2 to Layer 7.
+Capture only enough traffic to prove the observation.
+Result
+Network packets were captured, filtered and interpreted using Wireshark and tcpdump.
+
+
+LAB 5 — Footprinting, OSINT, DNS Enumeration and Attack-Surface Mapping
+Mapped Course Outcome: CO3
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Perform authorized WHOIS/DNS/OSINT reconnaissance and convert the collected information into an attack-surface inventory.
+Concept / Theory
+Passive reconnaissance gathers information without directly probing the target service, while active reconnaissance interacts with target infrastructure. WHOIS and public DNS can reveal registration and infrastructure metadata. OSINT findings should be validated and kept within the approved scope.
+Software / Requirements
+Kali Linux
+whois
+dig/nslookup
+theHarvester if installed
+Instructor-approved domain
+Step-by-Step Procedure
+mkdir -p ~/sea2-lab/recon
+whois <APPROVED_DOMAIN> | tee ~/sea2-lab/recon/whois.txt
+dig <APPROVED_DOMAIN> A
+dig <APPROVED_DOMAIN> MX
+dig <APPROVED_DOMAIN> NS
+dig <APPROVED_DOMAIN> TXT
+nslookup <APPROVED_DOMAIN>
+If theHarvester is available, use only the approved domain and a trainer-approved public source:
+theHarvester -d <APPROVED_DOMAIN> -b <APPROVED_SOURCE>
+12.Record discovered hostnames, mail infrastructure, name servers and public IPs.
+13.Create an attack-surface table with columns Asset, Source, Host/IP, Role/Service, Observation and Validation Status.
+14.Mark unverified OSINT results clearly instead of treating them as facts.
+Important Commands and Meaning
+Command / Filter	Purpose
+whois domain	Registration and registry metadata.
+dig domain A	IPv4 address records.
+dig domain MX	Mail-exchanger records.
+dig domain NS	Authoritative name servers.
+dig domain TXT	Text records such as SPF/verification data.
+theHarvester	Collects selected publicly indexed OSINT for a domain.
+Expected Output / Interpretation
+DNS queries return records that exist for the approved domain.
+WHOIS returns available registry metadata.
+The final attack-surface table separates assets from assumptions.
+Evidence to Capture
+WHOIS output
+A/MX/NS/TXT queries
+Attack-surface table
+One validated asset
+Common Errors and Troubleshooting
+Problem	Check / Fix
+No WHOIS data	Some registries redact details; record the limitation.
+No MX/TXT record	A record type may legitimately be absent.
+theHarvester source error	Use only available/approved sources or continue with WHOIS/DNS.
+Likely Viva Questions
+1. Passive vs active reconnaissance?
+2. What is an A record?
+3. What does MX represent?
+4. Why are NS records useful?
+5. Why must OSINT be validated?
+Exam Tips
+Do not confuse missing records with tool failure.
+State your scope before OSINT.
+Focus on interpretation, not volume of data.
+Result
+Authorized OSINT and DNS reconnaissance was completed and converted into a validated attack-surface inventory.
+
+
+LAB 6 — Host Discovery, Port Scanning, Service/OS Detection and NSE Scanning using Nmap
+Mapped Course Outcome: CO3
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Perform host discovery, TCP/UDP scanning, service/version detection, OS fingerprinting and safe NSE enumeration on the isolated lab subnet.
+Concept / Theory
+Different Nmap scan types answer different questions. Host discovery identifies reachable systems; port scanning identifies listening endpoints; version/OS detection fingerprints software; NSE scripts automate selected enumeration tasks.
+Software / Requirements
+Kali Linux
+Nmap
+Isolated lab subnet and assigned target
+Step-by-Step Procedure
+nmap -sn <LAB_SUBNET>/24
+sudo nmap -sS <TARGET_IP>
+nmap -sV <TARGET_IP>
+sudo nmap -O <TARGET_IP>
+sudo nmap -sU --top-ports 20 <TARGET_IP>
+nmap -sC -sV <TARGET_IP>
+sudo nmap -sS -sV -O -oA ~/sea2-lab/scans/target-profile <TARGET_IP>
+Command Explanation
+Command / Filter	Purpose
+-sn	Host discovery without a normal port scan.
+-sS	TCP SYN scan.
+-sU	UDP scan.
+--top-ports 20	Limits scan to the most common 20 ports.
+-sV	Version detection.
+-O	OS fingerprinting.
+-sC	Default NSE scripts.
+-oA basename	Saves normal, XML and grepable output formats.
+Expected Output / Interpretation
+Live hosts are listed during discovery.
+TCP/UDP port states are displayed.
+Version and possible OS details appear when fingerprinting succeeds.
+Three output files are created by `-oA`.
+Evidence to Capture
+Host discovery
+TCP scan
+Version/OS result
+UDP result
+Saved Nmap files
+Common Errors and Troubleshooting
+Problem	Check / Fix
+Requires root	Use sudo for SYN/OS/UDP features where required.
+OS detection uncertain	Nmap needs suitable open/closed ports and fingerprints; report confidence rather than guessing.
+UDP scan slow	Limit with `--top-ports` for the exam.
+Host discovery misses VM	Verify network settings; use the assigned IP if already known.
+Likely Viva Questions
+1. What does `-sn` do?
+2. SYN scan vs full TCP connection?
+3. Why is UDP scanning slower?
+4. What is NSE?
+5. What does `-oA` produce?
+Exam Tips
+Use focused scans to save exam time.
+Interpret `open`, `closed` and `filtered`.
+Do not equate an open port with a vulnerability.
+Result
+Host discovery and multi-method Nmap enumeration were completed and interpreted successfully.
+
+
+LAB 7 — Vulnerability Assessment using Nikto, Nuclei and Nessus/OpenVAS with CVE & CVSS Analysis
+Mapped Course Outcome: CO3
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Assess an authorized web/network target with vulnerability scanners, validate findings, map supported findings to CVE/CVSS, prioritize risk and propose remediation.
+Concept / Theory
+A vulnerability scanner produces findings, not guaranteed facts. False positives must be validated. CVE provides a public identifier for known vulnerabilities, while CVSS estimates technical severity. Final risk prioritization should also consider exposure, exploitability, asset importance and business impact.
+Software / Requirements
+Kali Linux
+Nikto
+Nuclei
+Nessus Essentials or OpenVAS/GVM
+Authorized Apache/WebGoat/Metasploitable target
+Step-by-Step Procedure
+nmap -sV <TARGET_IP>
+curl -I http://<TARGET_IP>
+nikto -h http://<TARGET_IP>
+If Nuclei is installed and templates are available:
+nuclei -u http://<TARGET_IP>
+15.Open Nessus/OpenVAS in the browser.
+16.Create a target using only the assigned IP.
+17.Create a basic vulnerability scan and launch it.
+18.After completion, inspect finding title, severity, affected host/port, description, evidence, CVE/CVSS when available, and solution.
+19.Select the top findings and manually correlate them with your Nmap/web observations.
+20.Export the scanner report in PDF/HTML/CSV if available.
+Finding Interpretation Template
+Item	Details
+Title	Clear vulnerability/misconfiguration name
+Severity	Critical / High / Medium / Low / Informational
+CVE	Use only if the scanner/source maps the issue to a CVE
+CVSS	Record scanner/source score and version when provided
+Evidence	Port, banner, scanner proof or response
+Impact	What could happen if exploited
+Remediation	Patch, upgrade, configuration change, segmentation, disable unused service
+Expected Output / Interpretation
+Nikto/Nuclei return applicable web observations.
+Nessus/OpenVAS generates a categorized report.
+Students can distinguish scanner evidence from confirmed exploitation.
+A prioritized remediation table is produced.
+Evidence to Capture
+Target verification
+Nikto/Nuclei output
+Scanner dashboard
+Top 3 findings
+Exported report/remediation table
+Common Errors and Troubleshooting
+Problem	Check / Fix
+Scanner cannot reach target	Verify VM routing, target IP and service availability.
+Nessus initializing	Wait for plugins to finish compiling/updating before scanning.
+Many informational findings	Prioritize by severity and relevance.
+Possible false positive	Validate service/version/configuration before reporting as confirmed.
+Likely Viva Questions
+1. CVE vs CVSS?
+2. What is a false positive?
+3. Why validate scanner findings?
+4. What does Critical severity mean conceptually?
+5. Why can a Medium finding still matter?
+Exam Tips
+Do not copy the scanner report blindly.
+For each important finding, explain evidence + impact + remediation.
+Keep CVSS and business risk conceptually separate.
+Result
+An authorized vulnerability assessment was completed, significant findings were validated and prioritized, and remediation guidance was prepared.
+
+
+LAB 8 — Controlled Exploitation of a Vulnerable Host using Metasploit Framework
+Mapped Course Outcome: CO4
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Use Metasploit in an isolated training environment to validate an instructor-selected known vulnerability and demonstrate module selection, configuration, session handling and evidence collection.
+Concept / Theory
+Metasploit organizes capabilities into modules. Exploit modules target vulnerabilities; payloads define what runs after successful exploitation. A reverse shell connects from target back to the tester, while a bind shell listens on the target. Meterpreter is a feature-rich Metasploit payload/session type. In an exam, the key skill is matching evidence to the correct module and configuring only the authorized target.
+Software / Requirements
+Kali Linux
+Metasploitable 2
+Metasploit Framework
+Isolated lab network
+Instructor-assigned vulnerable service/module
+Step-by-Step Procedure
+nmap -sV <TARGET_IP>
+msfconsole
+Search using the instructor-assigned service or CVE:
+search <SERVICE_OR_CVE>
+info <MODULE_NAME>
+use <MODULE_NAME>
+show options
+set RHOSTS <TARGET_IP>
+Set other required values shown by `show options` only when the module requires them, then execute:
+run
+If the deliberately vulnerable lab produces a session:
+sessions
+Interact with the assigned session using the session number shown by Metasploit:
+sessions -i <SESSION_ID>
+whoami
+hostname
+21.Collect minimal evidence showing target, module, successful validation and current identity.
+22.Return/background or exit the session cleanly and document remediation for the vulnerable service.
+Metasploit Workflow to Memorize
+Recon → Identify service/version → Search → Read `info` → Select module → `show options` → Configure authorized target → Execute → Verify session → Collect minimal evidence → Exit → Remediation.
+Key Commands
+Command / Filter	Purpose
+search keyword	Finds matching modules.
+info module	Displays description, references, targets and options.
+use module	Selects a module.
+show options	Shows required/current parameters.
+set RHOSTS IP	Sets remote target(s).
+run	Executes the selected module.
+sessions	Lists active sessions.
+sessions -i ID	Interacts with a selected session.
+Expected Output / Interpretation
+Nmap identifies the instructor-selected vulnerable service.
+Metasploit search returns relevant modules.
+`show options` shows required parameters.
+If the target/module match, a controlled session or validation result is produced.
+Evidence to Capture
+Nmap service evidence
+Module `info`
+Configured options
+Validation/session result
+Remediation note
+Common Errors and Troubleshooting
+Problem	Check / Fix
+Exploit fails	Re-check service/version, module compatibility and required options.
+No session	Failure is still a valid result; inspect output and do not randomly change modules.
+Wrong target	Stop immediately and verify RHOSTS.
+Payload connectivity issue	Verify isolated network reachability and configured local interface where applicable.
+Likely Viva Questions
+1. Exploit vs payload?
+2. Reverse shell vs bind shell?
+3. What is Meterpreter?
+4. Why use `info` before running a module?
+5. What is RHOSTS?
+Exam Tips
+Module selection is more important than memorizing one exploit.
+Always show evidence that the module matches the discovered service.
+A failed attempt should be explained, not hidden.
+Result
+A known vulnerability on the assigned deliberately vulnerable target was tested through a controlled Metasploit workflow and documented.
+
+
+LAB 9 — Password Security Assessment using Hydra, John the Ripper/Hashcat and Wordlists
+Mapped Course Outcome: CO4
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Demonstrate controlled online and offline password auditing using instructor-provided test accounts/hashes, and evaluate the effect of password complexity and defensive controls.
+Concept / Theory
+Online guessing sends authentication attempts to a live service and is constrained by network latency, rate limiting, lockouts and monitoring. Offline cracking operates on acquired practice hashes and can be much faster. Salts and slow password-hashing algorithms make offline attacks more expensive. The exercise uses only fictitious lab credentials/hashes.
+Software / Requirements
+Kali Linux
+Hydra
+John the Ripper and/or Hashcat
+Instructor-provided test account/service
+Instructor-provided practice hashes and small wordlist
+Step-by-Step Procedure
+printf 'welcome123\nstudent123\nLabPass2026!\n' > ~/sea2-wordlist.txt
+cat ~/sea2-wordlist.txt
+For the instructor-approved online lab account/service only:
+hydra -l <LAB_USER> -P ~/sea2-wordlist.txt <TARGET_IP> <APPROVED_SERVICE>
+Stop after the small assigned wordlist. Record whether the service shows delays, lockout or other controls.
+For the offline exercise, inspect the supplied practice hash file:
+cat <PRACTICE_HASH_FILE>
+Use the instructor-confirmed format with John:
+john --wordlist=~/sea2-wordlist.txt <PRACTICE_HASH_FILE>
+john --show <PRACTICE_HASH_FILE>
+Or use the instructor-provided Hashcat mode:
+hashcat -m <HASH_MODE> <PRACTICE_HASH_FILE> ~/sea2-wordlist.txt
+23.Compare which fictitious passwords are recovered and which are not.
+24.Write defensive controls: MFA, rate limiting, lockout/throttling, unique long passwords, password managers, salts and modern password hashing.
+Key Concepts
+Command / Filter	Purpose
+Online attack	Attempts authentication against a live service.
+Offline attack	Tests candidates against a copied practice hash.
+Wordlist	Candidate passwords used for testing.
+Salt	Random value incorporated into password hashing to defeat identical precomputed hashes.
+MFA	Adds another authentication factor beyond the password.
+Expected Output / Interpretation
+Hydra tests only the small approved candidate list against the lab account.
+John/Hashcat may recover deliberately weak practice passwords.
+Stronger practice passwords may remain unrecovered by the simple wordlist.
+Students explain why offline and online attacks have different constraints.
+Evidence to Capture
+Small wordlist
+Online lab result
+Offline result
+Comparison of weak vs stronger passwords
+Defensive recommendations
+Common Errors and Troubleshooting
+Problem	Check / Fix
+Hydra syntax/service error	Confirm the instructor-specified service/module and target.
+John reports no hashes	Confirm the practice hash format/file.
+Hashcat token/format error	Use the exact instructor-provided hash mode.
+No password recovered	This is a valid result; the candidate may not be in the wordlist.
+Likely Viva Questions
+1. Online vs offline password attack?
+2. Why are salts useful?
+3. Why is MFA important?
+4. What is rate limiting?
+5. Why does password length matter?
+Exam Tips
+Use only the provided lab account and hashes.
+Do not waste exam time with huge wordlists.
+Interpret an unrecovered hash correctly: it does not prove the password is uncrackable.
+Result
+Controlled password auditing was performed on fictitious lab credentials/hashes and the effect of password strength and defensive controls was evaluated.
+
+
+LAB 10 — Post-Exploitation Enumeration and Linux Privilege-Escalation Assessment using linPEAS
+Mapped Course Outcome: CO5
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Enumerate a compromised training host, identify privilege-escalation indicators manually and with linPEAS, and explain one instructor-approved escalation path and remediation.
+Concept / Theory
+Privilege escalation is the transition from a lower-privileged context to a higher one. Common Linux causes include overly broad sudo rules, unsafe SUID programs, writable privileged scripts, cron misconfiguration, exposed credentials and vulnerable software. Automated enumeration accelerates discovery but does not prove exploitability.
+Software / Requirements
+Kali Linux
+Metasploitable 2 or instructor-provided vulnerable Linux VM
+Authorized existing shell/session
+linPEAS
+Step-by-Step Procedure
+whoami
+id
+hostname
+uname -a
+ip addr 2>/dev/null || ifconfig
+ip route 2>/dev/null || route -n
+ps aux
+sudo -l 2>/dev/null
+cat /etc/crontab 2>/dev/null
+find / -perm -4000 -type f 2>/dev/null
+find / -writable -type f 2>/dev/null | head -50
+Transfer the instructor-provided linPEAS file to the authorized target using the classroom-approved method, then:
+chmod +x linpeas.sh
+./linpeas.sh | tee linpeas-output.txt
+25.Review highlighted findings under users, sudo, SUID, cron, writable paths, credentials/configuration, kernel/software and network.
+26.Select an instructor-approved finding and explain why it could create an escalation path.
+27.Validate only as required by the lab. Do not add persistence or alter unrelated services.
+28.Write the remediation, such as removing unsafe permissions, restricting sudo, fixing cron ownership or patching software.
+Manual vs Automated Enumeration
+Command / Filter	Purpose
+sudo -l	Shows permitted sudo commands for the current user.
+find ... -4000	Lists SUID files.
+/etc/crontab	Shows system cron entries.
+ps aux	Shows running processes and owners.
+linPEAS	Automates collection/highlighting of many escalation indicators.
+Expected Output / Interpretation
+Current privilege level is established.
+Manual checks identify possible privileged configurations.
+linPEAS highlights multiple categories for review.
+Students can explain why a highlighted item is or is not a credible path.
+Evidence to Capture
+Initial user/host
+Manual SUID/sudo/cron evidence
+linPEAS output
+Chosen finding
+Remediation
+Common Errors and Troubleshooting
+Problem	Check / Fix
+linPEAS permission denied	Use `chmod +x` or invoke with the shell if permitted by the lab.
+Huge output	Save with `tee` and focus on the assigned categories.
+sudo not available	Document it and continue with SUID/cron/permissions.
+Finding is highlighted but not exploitable	Report it as an indicator, not a confirmed escalation.
+Likely Viva Questions
+1. What is vertical privilege escalation?
+2. Why is SUID not automatically a vulnerability?
+3. What does `sudo -l` show?
+4. Why can a writable root cron script be dangerous?
+5. Why must linPEAS findings be validated?
+Exam Tips
+Start with `whoami` and `id` so the before/after state is clear.
+Manual checks earn understanding; linPEAS supports them.
+Explain remediation for the same misconfiguration you identify.
+Result
+Post-exploitation enumeration was completed, privilege-escalation indicators were analyzed, and an approved path and remediation were documented.
+
+
+LAB 11 — Multi-Host Pivoting and Post-Exploitation CTF in an Isolated Lab Environment
+Mapped Course Outcome: CO5
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Demonstrate pivoting across two isolated virtual networks, discover an internal training host through an existing authorized session, and maintain a clear multi-host evidence/session trail.
+Concept / Theory
+Pivoting uses a compromised host that has access to another network as a controlled route to systems not directly reachable from the tester. It demonstrates why segmentation and dual-homed hosts matter. This exercise requires an isolated topology and pre-authorized vulnerable VMs.
+Recommended Topology
+Item	Details
+Kali	192.168.56.101 — Host-Only network A
+Pivot Host	192.168.56.102 on network A + 10.10.10.1 on internal network B
+Internal Target	10.10.10.20 — network B only
+Expected initial state	Kali reaches Pivot Host; Kali cannot directly reach Internal Target
+Software / Requirements
+Kali Linux
+Two Metasploitable 2 / deliberately vulnerable VMs
+Metasploit Framework
+VirtualBox Host-Only + Internal Network
+Instructor-created CTF flags/evidence
+Step-by-Step Procedure
+29.Verify Kali can reach the Pivot Host but not the Internal Target directly.
+30.Use the previously authorized Metasploit session on the Pivot Host.
+sessions
+sessions -i <PIVOT_SESSION_ID>
+ifconfig
+route -n
+Record the second subnet visible from the Pivot Host. Background the session if required by the framework.
+In Metasploit, use the instructor-demonstrated routing mechanism for the discovered internal subnet. One common lab method is the autoroute post module:
+background
+use post/multi/manage/autoroute
+set SESSION <PIVOT_SESSION_ID>
+set SUBNET 10.10.10.0
+set NETMASK 255.255.255.0
+run
+route print
+Use Metasploit-compatible discovery/enumeration modules through the route for the assigned internal subnet/host. Keep the scope limited to the lab.
+search portscan
+Select the instructor-approved scanner module, configure RHOSTS for the internal training range or assigned internal target, and run it. Identify 10.10.10.20 or the IP supplied by the instructor.
+31.Enumerate only the assigned internal target and, if required, validate the instructor-selected vulnerable service using the controlled Lab 8 workflow.
+32.Maintain a table with Time, Host, IP, Session, Action, Result and Evidence.
+33.Collect the CTF flag/evidence placed by the instructor, then close/background sessions cleanly. Do not create hidden persistence or modify logs.
+What Students Must Understand
+The pivot host is dual-homed: it can communicate with both networks.
+Kali does not magically join the internal network; the framework forwards supported traffic through the existing session.
+Pivoting is different from privilege escalation: one changes network reachability, the other changes permissions.
+Session tracking prevents confusion during multi-host exercises.
+Expected Output / Interpretation
+Before routing, Kali cannot directly access the internal target.
+The pivot session reveals 10.10.10.0/24 or the instructor-defined internal network.
+Metasploit's route table shows the internal subnet through the selected session.
+The assigned internal host becomes discoverable through the controlled pivot workflow.
+Evidence to Capture
+Topology/IP table
+Pivot host interfaces/routes
+Metasploit `route print`
+Internal-host discovery
+Session tracking table
+CTF evidence
+Common Errors and Troubleshooting
+Problem	Check / Fix
+No second interface on pivot	Check VirtualBox: Pivot Host must have two adapters on different lab networks.
+Internal target not found	Verify Internal Target is on the same Internal Network name and has the assigned static IP.
+Autoroute fails	Confirm the session type/state and use the instructor-supported Metasploit routing method.
+Session lost	Re-establish only the approved training session and update the tracking table.
+Likely Viva Questions
+1. What is pivoting?
+2. Why does the pivot host need two network paths?
+3. Pivoting vs privilege escalation?
+4. Why can't Kali initially reach the internal target?
+5. Why is session tracking important?
+Exam Tips
+Draw the topology before starting.
+Prove the 'before' state (no direct reachability) and the 'after' routed state.
+Do not attempt persistence; the exam objective is pivoting and tracking.
+Result
+A multi-host pivot was configured in the isolated CTF topology, the internal training host was discovered through the authorized session, and the attack path was documented.
+
+
+LAB 12 — End-to-End Ethical Hacking Assessment and Professional Vulnerability Report Preparation
+Mapped Course Outcome: CO6
+Exam focus: Understand the workflow, execute it safely in the isolated lab, interpret the output, preserve evidence, and explain the result during viva.
+Aim
+Plan and execute a scoped end-to-end ethical hacking assessment of an assigned vulnerable host and produce a professional report containing evidence, risk prioritization, CVE/CVSS where supported, and remediation.
+Concept / Theory
+A professional assessment is more than running tools. It begins with scope and rules of engagement, uses evidence-driven testing, records reproducible findings, minimizes impact, and ends with clear remediation. The executive summary communicates business-level risk; technical findings provide enough detail for engineers to reproduce and fix the issue.
+Software / Requirements
+Kali Linux
+Assigned vulnerable VM/web target
+Nmap
+Wireshark/tcpdump when needed
+Nikto/Nuclei/Nessus/OpenVAS as assigned
+Metasploit only when explicitly in scope
+Word processor/report template
+Step-by-Step Procedure
+Phase 1 — Scope and Rules of Engagement
+34.Record target IP/URL, allowed testing methods, exclusions, time window and evidence requirements.
+35.Confirm that only the assigned isolated target is in scope.
+Phase 2 — Workspace and Reconnaissance
+mkdir -p ~/sea2-capstone/{recon,scans,evidence,report}
+nmap -sn <LAB_SUBNET>/24
+nmap -sC -sV -oA ~/sea2-capstone/scans/baseline <TARGET_IP>
+36.Record exposed services and choose appropriate follow-up checks.
+37.If the target is a web server, capture response headers and run the assigned web scanner.
+curl -I http://<TARGET_IP>
+nikto -h http://<TARGET_IP>
+Phase 3 — Vulnerability Assessment
+38.Run the assigned Nessus/OpenVAS/Nuclei assessment.
+39.Validate the most important findings against service/version/configuration evidence.
+40.Map CVE/CVSS only where supported by the scanner/reference data.
+Phase 4 — Controlled Validation
+41.For an instructor-approved known vulnerability, follow Lab 8: identify → search → read module info → configure → run → minimal evidence.
+42.If a session is part of scope, perform only required enumeration and stop after collecting proof.
+Phase 5 — Risk and Remediation
+For each finding, complete:
+Item	Details
+Finding title	Specific and concise
+Severity / CVSS	Use supported score/severity
+Affected asset	IP, hostname, port/service
+Description	What is wrong
+Evidence / PoC	Scanner/Nmap/request/session evidence
+Impact	What an attacker could achieve
+Recommendation	Specific corrective action
+Retest	How to verify the fix
+Phase 6 — Professional Report
+Cover Page
+Executive Summary
+Scope and Rules of Engagement
+Methodology
+Risk Summary
+Technical Findings
+Remediation Roadmap
+Conclusion
+Appendix / Evidence
+Example Technical Finding Structure
+Title: Outdated/Vulnerable Network Service
+Severity: High
+Affected Asset: <TARGET_IP>:<PORT>
+Evidence: Nmap/scanner output identifies the affected service/version.
+Impact: Explain the realistic consequence supported by the lab finding.
+Recommendation: Patch/upgrade, disable unnecessary service, restrict exposure and retest.
+Retest: Re-run service/version and vulnerability checks after remediation.
+Phase 7 — Final Quality Check
+Every claim has evidence.
+No out-of-scope hosts appear in screenshots.
+No unnecessary passwords/secrets are included.
+Executive summary avoids excessive tool jargon.
+Technical findings contain actionable remediation.
+Risk ratings are consistent.
+Report filename and student details are correct.
+3-Hour Exam Time Strategy
+Command / Filter	Purpose
+0–20 min	Scope, topology, connectivity and workspace.
+20–60 min	Reconnaissance and Nmap enumeration.
+60–105 min	Vulnerability assessment / targeted validation.
+105–135 min	Evidence organization and risk analysis.
+135–170 min	Report writing.
+170–180 min	Final checks and submission.
+Expected Output / Interpretation
+A complete engagement folder is produced.
+Reconnaissance and scanner evidence support the findings.
+Important issues are prioritized with defensible severity/risk reasoning.
+The final report contains both executive and technical sections and actionable remediation.
+Evidence to Capture
+Scope statement
+Baseline scan
+Vulnerability evidence
+Controlled validation evidence if required
+Risk table
+Executive summary
+Technical finding
+Remediation roadmap
+Common Errors and Troubleshooting
+Problem	Check / Fix
+Too many findings	Prioritize the highest-risk, best-supported findings.
+Scanner output contradicts Nmap	Validate manually and state uncertainty.
+Missing CVE	Do not invent one; report the configuration issue without a CVE.
+Running out of time	Stop additional scanning and preserve time for evidence/result/report.
+Likely Viva Questions
+1. What is the purpose of rules of engagement?
+2. Executive summary vs technical finding?
+3. CVE vs CVSS vs risk?
+4. Why is evidence important?
+5. What is remediation validation/retesting?
+Exam Tips
+Treat the report as part of the practical, not an afterthought.
+One well-supported finding is better than several unverified claims.
+Always connect Evidence → Impact → Remediation.
+Keep screenshots readable and label them.
+Result
+An end-to-end ethical hacking assessment was executed within the assigned scope and documented in a professional evidence-based report with prioritized remediation.
+
+
+SEA-2 Last-Minute Revision Sheet
+Students should be able to explain and demonstrate the following without depending entirely on memorized commands:
+Item	Details
+CO1	VirtualBox isolation; NAT vs Host-Only; IP/subnet/routing; Linux permissions; SUID/SGID; processes/services; Bash.
+CO2	Ports/services; banner grabbing; Nmap service enumeration; Wireshark/tcpdump; protocol fields; capture/display filters.
+CO3	Passive vs active recon; WHOIS/DNS; host discovery; TCP/UDP scanning; -sV/-O/NSE; Nikto/Nuclei/Nessus/OpenVAS; CVE/CVSS; false positives.
+CO4	Metasploit workflow; exploit vs payload; reverse vs bind shell; Meterpreter concept; online vs offline password auditing; wordlists; defensive controls.
+CO5	Post-exploitation enumeration; sudo/SUID/cron/permissions; linPEAS interpretation; pivoting; dual-homed hosts; session/evidence tracking.
+CO6	Scope/ROE; methodology; evidence; severity/risk; executive summary; technical findings; remediation; retesting.
+Universal Practical Answer Format
+For any SEA-2 lab, structure your record as: AIM → REQUIREMENTS → TOPOLOGY/SCOPE → COMMANDS & PURPOSE → PROCEDURE → EXPECTED OUTPUT → OBSERVATION/INTERPRETATION → EVIDENCE → RESULT → REMEDIATION (where applicable).
+General Viva Strategy
+Explain what the command does before explaining its output.
+Differentiate discovery, vulnerability and exploitation.
+Do not claim a vulnerability without evidence.
+Mention scope and authorization when discussing active testing.
+For every security weakness, know at least one practical remediation.
