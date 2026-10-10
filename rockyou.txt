@@ -2,7 +2,7 @@ th d="m.427 1.927 1.215 1.215a8.002 8.002 0 1 1-1.6 5.685.75.75 0 1 1 1.493-.154
 
 
 
-Setup		ip addr		ip route	ifconfig	ping -c 4 target	mkdir -p ~/sea2-lab/{recon,scans,evidence,reports}	tree ~/sea2-lab 2>/dev/null || find ~/sea2-lab -maxdepth 2 -type d		snapshot
+1. Setup		ip addr		ip route	ifconfig	ping -c 4 target	mkdir -p ~/sea2-lab/{recon,scans,evidence,reports}	tree ~/sea2-lab 2>/dev/null || find ~/sea2-lab -maxdepth 2 -type d		snapshot
 
 
 
@@ -10,7 +10,7 @@ th d="m.427 1.927 1.215 1.215a8.002 8.002 0 1 1-1.6 5.685.75.75 0 1 1 1.493-.154
 
 
 
-SUID/SGID		whoami		id	pwd	ls -la		mkdir -p ~/sea2-permissions && cd ~/sea2-permissions		touch sample.txt && chmod 640 sample.txt && ls -l sample.txt		find / -perm -4000 -type f 2>/dev/null		find / -perm -2000 -type f 2>/dev/null		ps aux | head -20	ss -tulpn 2>/dev/null || netstat -tulpn		journalctl -n 20 2>/dev/null || tail -n 20 /var/log/syslog 2>/dev/null		nano ~/sea2-audit.sh		#!/bin/bash, echo "=== BASIC SECURITY AUDIT ===", date, hostname, id, echo "--- Disk ---", df -h, echo "--- Listening Services ---", ss -tulpn 2>/dev/null || netstat -tulpn, echo "---, Recent Logins ---", last -n 5		chmod +x ~/sea2-audit.sh		~/sea2-audit.sh | tee ~/sea2-lab/evidence/linux-audit.txt
+2. SUID/SGID		whoami		id	pwd	ls -la		mkdir -p ~/sea2-permissions && cd ~/sea2-permissions		touch sample.txt && chmod 640 sample.txt && ls -l sample.txt		find / -perm -4000 -type f 2>/dev/null		find / -perm -2000 -type f 2>/dev/null		ps aux | head -20	ss -tulpn 2>/dev/null || netstat -tulpn		journalctl -n 20 2>/dev/null || tail -n 20 /var/log/syslog 2>/dev/null		nano ~/sea2-audit.sh		#!/bin/bash, echo "=== BASIC SECURITY AUDIT ===", date, hostname, id, echo "--- Disk ---", df -h, echo "--- Listening Services ---", ss -tulpn 2>/dev/null || netstat -tulpn, echo "---, Recent Logins ---", last -n 5		chmod +x ~/sea2-audit.sh		~/sea2-audit.sh | tee ~/sea2-lab/evidence/linux-audit.txt
 
 
 
@@ -18,7 +18,7 @@ th d="m.427 1.927 1.215 1.215a8.002 8.002 0 1 1-1.6 5.685.75.75 0 1 1 1.493-.154
 
 
 
-Banner		ping -c 3 <TARGET_IP>		nmap <TARGET_IP>	nmap -sV <TARGET_IP>	nmap -sC -sV <TARGET_IP>	nmap -sV -oN ~/sea2-lab/scans/service-enum.txt <TARGET_IP>		curl -I http://<TARGET_IP>		nc -nv <TARGET_IP> <PORT>
+3. Banner		ping -c 3 <TARGET_IP>		nmap <TARGET_IP>	nmap -sV <TARGET_IP>	nmap -sC -sV <TARGET_IP>	nmap -sV -oN ~/sea2-lab/scans/service-enum.txt <TARGET_IP>		curl -I http://<TARGET_IP>		nc -nv <TARGET_IP> <PORT>
 
 
 
@@ -26,7 +26,7 @@ th d="m.427 1.927 1.215 1.215a8.002 8.002 0 1 1-1.6 5.685.75.75 0 1 1 1.493-.154
 
 
 
-Wireshark 	Start capture		ping -c 4 <TARGET_IP>		curl http://<TARGET_IP>		icmp, tcp, http, dns, ip.addr == <TARGET_IP>		inspect		sudo tcpdump -i <INTERFACE> -nn host <TARGET_IP>		sudo tcpdump -i <INTERFACE> -nn -c 50 -w ~/sea2-lab/evidence/lab4.pcap host <TARGET_IP>		wireshark
+4. Wireshark 	Start capture		ping -c 4 <TARGET_IP>		curl http://<TARGET_IP>		icmp, tcp, http, dns, ip.addr == <TARGET_IP>		inspect		sudo tcpdump -i <INTERFACE> -nn host <TARGET_IP>		sudo tcpdump -i <INTERFACE> -nn -c 50 -w ~/sea2-lab/evidence/lab4.pcap host <TARGET_IP>		wireshark
 
 
 
