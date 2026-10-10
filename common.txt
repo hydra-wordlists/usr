@@ -1,0 +1,226 @@
+Installing dependencies:
+  binutils-mingw-w64-base    kali-wallpapers-2026                  libleptonica6            libstdc++-16-dev                pyinstaller                        python3-pydantic-settings
+  binwalk3                   kismet-capture-antsdr-droneid         libllvmspirvlib21.1      libtcl9.0                       pyinstaller-hooks-contrib          python3-pysnmp                
+  chromium-driver            kismet-capture-freaklabs-zigbee       liblouisutdml-bin        libtesseract5                   python3-aioconsole                 python3-pytest                
+  clang-21                   kismet-capture-radiacode-usb          liblouisutdml-data       libtheora1                      python3-aiohttp-socks              python3-python-socks          
+  clang-tools-21             kismet-capture-rtl433                 liblouisutdml9t64        libtsk23                        python3-annotated-doc              python3-pyvirtualdisplay      
+  cpp-16                     kismet-capture-rtladsb                liblua5.5-0              libtss2-rc0t64                  python3-argon2-cffi-bindings       python3-pywerview             
+  cpp-16-x86-64-linux-gnu    kismet-capture-serial-radview         libmate-desktop-2-17t64  libucl1                         python3-astroid                    python3-pyyaml-env-tag        
+  cups                       libavfilter11                         libmongoc2-2             libunibreak7                    python3-browser-cookie3            python3-rapidfuzz   
+
+
+
+5.Domain		mkdir -p ~/sea2-lab/recon      	whois <APPROVED_DOMAIN> | tee ~/sea2-lab/recon/whois.txt	dig <APPROVED_DOMAIN> A		dig <APPROVED_DOMAIN> MX	dig <APPROVED_DOMAIN> NS		dig <APPROVED_DOMAIN> TXT	   nslookup <APPROVED_DOMAIN>		theHarvester -d <APPROVED_DOMAIN> -b <APPROVED_SOURCE>
+
+|Record hostnames,	MX NS IP
+ attack-surface table.
+ unverified OSINT results.\---
+
+
+
+
+          
+  cups-browsed               libbfio1                              libmupdf28.2             libvidstab1.2                   python3-cbor2                      python3-rich-argparse         
+  cups-client                libblockdev-smart3                    libnet9                  libvslvm1t64                    python3-dasbus                     python3-selenium              
+  cups-common                libbluray4                            libnsl3                  linux-base-7.1.5+kali-amd64     python3-deprecation                python3-setproctitle          
+  cups-core-drivers          libbson2-2                            libntfs-3g90             linux-base-amd64                python3-discovery                  python3-stamina               
+  cups-daemon                libclang-common-21-dev                libntlm0                 linux-binary-7.1.5+kali-amd64   python3-dunamai                    python3-tenacity              
+  cups-filters               libclang-cpp21                        libobjc-15-dev           linux-image-7.1.5+kali-amd64    python3-filetype                   python3-terminaltables3       
+  cups-filters-core-drivers  libclang-rt-21-dev                    libobjc-16-dev           linux-modules-7.1.5+kali-amd64  python3-fuzzywuzzy                 python3-tinyhtml5             
+  cups-ipp-utils             libclang1-21                          libperl5.42              llvm-21                         python3-httpcore2                  python3-tomlkit               
+  cups-ppdc                  libcmark-gfm-extensions0.29.0.gfm.13  libplacebo360            llvm-21-dev                     python3-httpx-ntlm                 python3-trio                  
+  cups-server-common         libcmark-gfm0.29.0.gfm.13             libpoppler-cpp3          llvm-21-linker-tools            python3-httpx2                     python3-trio-websocket        
+  dconf-cli                  libconfig++15                         libpostal-data           llvm-21-runtime                 python3-iniconfig                  python3-truststore            
+  enchant                    libconfig15                           libproc2-1               llvm-21-tools                   python3-ipython-pygments-lexers    python3-wapiti-swagger        
+  eyewitness                 libcrypt-urandom-perl                 libpyside6-py3-6.10      llvm-spirv-21                   python3-jeepney                    python3-watchdog              
+  feroxbuster                libcupsfilters1t64                    libqcustomplot2.1        lynx                            python3-joblib                     python3-zombie-telnetlib      
+  fonts-font-awesome-legacy  libdisplay-info3                      libqpdf30                lynx-common                     python3-krb5                       ruby-ferrum                   
+  freerdp-x11                libencode-perl                        libradare2-6.0.0t64      mkdocs                          python3-levenshtein                ruby-sys-proctable            
+  g++-16                     libfontembed1t64                      librubberband3           mkdocs-get-deps                 python3-livereload                 ruby-websocket-driver         
+  g++-16-x86-64-linux-gnu    libgcc-15-dev                         libsdl3-0                network-manager-tui             python3-loguru                     ruby-websocket-extensions     
+  gcc-15-base                libgcc-16-dev                         libsframe3               node-popper2                    python3-lunr                       sasquatch                     
+  gcc-16                     libglycin-2-0                         libshiboken6-py3-6.10    nuclei                          python3-mergedeep                  stunnel                       
+  gcc-16-x86-64-linux-gnu    libhdf5-hl-320                        libsimdutf35             openjdk-25-jre                  python3-mitmproxy-linux            systemd-tpm                   
+  ghp-import                 libibus-1.0-5                         libsmb2-6                openjdk-25-jre-headless         python3-nltk                       tcl9.0                        
+  glycin-loaders             libimath-3-2-30                       libsnmp45                openssh-common                  python3-outcome                    xautoresize                   
+  glycin-thumbnailers        libjim0.84                            libsodium26              perl-modules-5.42               python3-pathspec                   xfce4-eyes-plugin             
+  httpx-toolkit              libjs-bootstrap5                      libsqlcipher2            photorec                        python3-pluggy                                                   
+  hydra-gtk                  libjs-d3                              libsso-mib0              poppler-utils                   python3-poetry-core                                              
+  ibus-gtk3                  libjs-lunr                            libstdc++-15-dev         postgresql-18-pg-gvm            python3-poetry-dynamic-versioning         
+
+
+
+
+
+  6.nmap/os/nse   	  	 nmap -sn <LAB_SUBNET>/24	nmap -sV <TARGET_IP>	  nmap -sC -sV <TARGET_IP>	  sudo nmap -sS <TARGET_IP>	  sudo nmap -O <TARGET_IP> 		sudo nmap -sU --top-ports 20 <TARGET_IP>	 sudo nmap -sS -sV -O -oA ~/sea2-lab/scans/target-profile <TARGET_IP>		
+
+
+
+
+
+  amass-common               libcgraph6               libimath-3-1-29t64      libpocketsphinx3       libswscale8              pocketsphinx-en-us                    python3-xlrd
+  bluez-hcidump              libconfig++11            libinstpatch-1.0-2      libpoppler147          libteamdctl0             python3-bluepy                        python3-xlutils
+  curlftpfs                  libconfig-inifiles-perl  libjim0.83              libportmidi0           libtheora0               python3-click-plugins                 python3-xlwt
+  enchant-2                  libconfig11              libjs-jquery-ui         libpostproc58          libtsk19t64              python3-fs                            python3-yaswfp
+  firmware-marvell-prestera  libcrypt-dev             libkmlbase1t64          libpython3.13          libudfread0              python3-gpg                           python3-zombie-imp
+  firmware-ti-connectivity   libdisplay-info2         libkmldom1t64           libpython3.13-dev      libunibreak6             python3-kismetcapturebtgeiger         python3.13
+  gir1.2-girepository-2.0    libdlt2                  libkmlengine1t64        libpython3.13-minimal  libvdpau-va-gl1          python3-kismetcapturefreaklabszigbee  python3.13-dev
+  libabsl20240722            libencode-perl           liblab-gamut1           libpython3.13-stdlib   libvidstab1.1            python3-kismetcapturertl433           python3.13-minimal
+  libabsl20260107            libfuse2t64              libllvmspirvlib18.1     libqt5ct-common1.8     libwireshark18           python3-kismetcapturertladsb          python3.13-tk
+  libann0                    libgav1-1                libmbedcrypto16         libradare2-5.0.0t64    libwiretap15             python3-kismetcapturertlamr           python3.13-venv
+  libarmadillo14             libgdal36                libmjpegutils-2.1-0t64  libraw23t64            libwsutil16              python3-mitmproxy-wireguard           rpcsvc-proto
+  libaudio2                  libgdata-common          libmongoc-1.0-0t64      librubberband2         libzxing3                python3-packaging-whl                 ruby-unf-ext
+  libavc1394-0               libgdata22               libmpeg2encpp-2.1-0t64  libsframe1             llvm-spirv-18            python3-pluginbase                    samba-ad-dc
+  libavfilter10              libgeos3.13.1            libmplex2-2.1-0t64      libsigsegv2            mesa-va-drivers          python3-protobuf                      samba-ad-provision
+  libavformat61              libgirepository-1.0-1    libmupdf25.1            libsnmp40t64           mesa-vdpau-drivers       python3-pyinstaller-hooks-contrib     samba-dsdb-modules
+  libblosc2-4                libgpgme11t64            libnet1                 libsodium23            network-manager-gnome    python3-pysmi                         vdpau-driver-all
+  libbluray2                 libgpgmepp6t64           libntfs-3g89t64         libsoup-2.4-1          openjdk-21-jre           python3-pysnmp4
+  libbluray3                 libhdf4-0-alt            libogdi4.1              libsoup2.4-common      openjdk-21-jre-headless  python3-terminaltables
+  libbson-1.0-0t64           libhdf5-310              libperl5.40             libsphinxbase3t64      openssh-client-gssapi    python3-tz
+  libcdt5                    libhdf5-hl-310           libplacebo349           libsqlcipher1          perl-modules-5.40        python3-wheel-whl
+Use 'sudo apt autoremove' to remove them.
+
+Upgrading:
+  7zip                                libbit-vector-perl              libnet-dns-perl                 libxi6                                  python3-pure-eval
+  accountsservice                     libblas3                        libnet-dns-sec-perl             libxinerama1                            python3-pyasn1
+  acl                                 libblkid-dev                    libnet-http-perl                libxkbcommon-x11-0                      python3-pycparser
+  adduser                             libblkid1                       libnet-libidn2-perl             libxkbcommon0                           python3-pycurl
+  adwaita-icon-theme                  libblockdev-crypto3             libnet-netmask-perl             libxkbfile1                             python3-pydispatch
+  aircrack-ng                         libblockdev-fs3                 libnet-server-perl              libxklavier16                           python3-pydot                                  
+  alsa-ucm-conf                       libblockdev-loop3               libnet-ssleay-perl              libxm4                                  python3-pydyf                                  
+  amass                               libblockdev-mdraid3             libnetcdf22                     libxml++2.6-2v5                         python3-pyee                                   
+  amd64-microcode                     libblockdev-nvme3               libnetfilter-conntrack3         libxml-libxml-perl                      python3-pyexploitdb                            
+  apache2                             libblockdev-part3               libnetfilter-queue1             libxml-parser-perl                      python3-pyfiglet                               
+  apache2-bin                         libblockdev-swap3               libnetpbm11t64                  libxml-regexp-perl                      python3-pygments                               
+  apache2-data                        libblockdev-utils3              libnfnetlink0                   libxml-twig-perl                        python3-pyinstaller                            
+  apache2-utils                       libblockdev3                    libnfs14                        libxml2-16                              python3-pylnk3                                 
+  apparmor                            libblosc1                       libnfsidmap1                    libxml2-dev                             python3-pylsqpack                              
+  apt                                 libbluetooth3                   libnftables1                    libxml2-utils                           python3-pymysql                                
+  apt-file                            libbpf1                         libnftnl11                      libxmp4                                 python3-pynfsclient                            
+  apt-utils                           libbs2b0                        libnghttp2-14                   libxmu6                                 python3-pyparsing                              
+  arj                                 libbtbb1                        libnice10                       libxmuu1                                python3-pypdf                                  
+  arping                              libbytes-random-secure-perl     libnids1.21t64                  libxnnpack0.20241108                    python3-pyperclip                              
+  aspell                              libbytesize-common              libnm0                          libxnvctrl0                             python3-pyphen                                 
+  aspell-en                           libbytesize1                    libnma-common                   libxpm4                                 python3-pypykatz                               
+  at-spi2-common                      libc-bin                        libnma-gtk4-0                   libxpresent1                            python3-pyqrcode                               
+  at-spi2-core                        libc-dev-bin                    libnma0                         libxrandr2                              python3-pyqt5                                  
+  atftpd                              libc-gconv-modules-extra        libnorm1t64                     libxslt1.1                              python3-pyqt5.qtopengl                         
+  atril                               libc-l10n                       libnotify-bin                   libxss1                                 python3-pyqt6                                  
+  atril-common                        libc6                           libnotify4                      libxt-dev                               python3-pyqt6.sip                              
+  attr                                libc6-dev                       libnpth0t64                     libxt6t64                               python3-pyqtgraph                              
+  avahi-daemon                        libc6-i386                      libnsl2                         libxtables12                            python3-pyramid                                
+  avahi-utils                         libcaca0                        libnspr4                        libxvidcore4                            python3-pysmi                                  
+  axel                                libcairomm-1.0-1v5              libnss-mdns                     libxvmc1                                python3-pysnmp4                                
+  base-files                          libcairomm-1.16-1               libnss-systemd                  libxxf86dga1                            python3-pyspnego       
+
+
+
+
+
+7.nessusOpenvas			nmap -sV <TARGET_IP>		curl -I http://<TARGET_IP>		nikto -h http://<TARGET_IP>		nuclei -u http://<TARGET_IP>		
+
+|	OpenVAS		target(ip)	scan	inspect	export
+
+
+
+
+                    
+                                                                                                                                                                                             
+Suggested packages:
+  clang-21-doc                 | foomatic-db    libbluray-bdj         libsndio7.0             nodejs                python3-socksio        python3-slimmer              logcheck-database
+  wasi-libc                    antiword         bootstrap-icons       libstdc++-15-doc        fonts-ipafont-gothic  python3-brotlicffi     python-lunr-doc              tcl-tclreadline
+  gcc-16-locales               docx2txt         libjs-bootstrap5-doc  libstdc++-16-doc        fonts-ipafont-mincho  python-joblib-doc      python-rapidfuzz-doc
+  cpp-16-doc                   g++-16-multilib  libjs-es5-shim        debian-kernel-handbook  fonts-wqy-microhei    coffeescript           python-selenium-doc
+  cups-bsd                     gcc-16-doc       ooo2dbk               linux-doc-7.1           | fonts-wqy-zenhei    node-less              python-tenacity-doc
+  cups-pdf                     gcc-16-multilib  rtf2xml               llvm-21-doc             fonts-indic           node-uglify            python3-terminaltables3-doc
+  foomatic-db-compressed-ppds  frei0r-plugins   libgles1              mkdocs-doc              python-cbor2-doc      python-livereload-doc  python-watchdog-doc
+
+Not upgrading:
+  colord  libcolorhug2  libgtk-4-1  libgtk-4-bin  libgtkmm-4.0-0  libpskc0t64  network-manager-applet  nm-connection-editor  openssh-client-gssapi  python3-setuptools  yelp
+
+Summary:
+  Upgrading: 2095, Installing: 207, Removing: 0, Not Upgrading: 11
+  Download size: 3,809 MB / 3,809 MB
+  Space needed: 3,113 MB / 54.7 GB available
+
+
+engrampa                            libdw1t64                       libpython3.13-minimal           netmask                                 python3-zombie-imp                             
+  engrampa-common                     libeac3                         libpython3.13-stdlib            netpbm                                  python3-zope.deprecation                       
+  espeak-ng-data                      libebackend-1.2-11t64           libpython3.14                   netsed                                  python3-zope.event                             
+  ethtool                             libebook-1.2-21t64              libpython3.14-dev               netsniff-ng                             python3.13                                     
+  ettercap-common                     libebook-contacts-1.2-4t64      libpython3.14-minimal           network-manager                         python3.13-dev                                 
+  ettercap-graphical                  libebur128-1                    libpython3.14-stdlib            network-manager-l10n                    python3.13-minimal                             
+  evil-winrm                          libedata-book-1.2-27t64         libpython3.14-testsuite         network-manager-l2tp                    python3.13-tk                                  
+  evolution-data-server-common        libedataserver-1.2-27t64        libqhull-r8.0                   network-manager-l2tp-gnome              python3.13-venv                                
+  exfatprogs                          libedit2                        libqmi-glib5                    network-manager-openconnect             python3.14                                     
+  exiv2                               libefiboot1t64                  libqmi-proxy                    network-manager-openconnect-gnome       python3.14-dev                                 
+  exo-utils                           libefivar1t64                   libqmi-utils                    network-manager-openvpn                 python3.14-doc                                 
+  expect                              libegl-mesa0                    libqrencode4                    network-manager-openvpn-gnome           python3.14-examples                            
+  exploitdb                           libelf1t64                      libqrtr-glib0                   network-manager-pptp                    python3.14-full                                
+  faraday                             libenchant-2-2                  libqscintilla2-qt5-15           network-manager-pptp-gnome              python3.14-gdbm                                
+  faraday-cli                         libespeak-ng1                   libqscintilla2-qt5-l10n         network-manager-vpnc                    python3.14-minimal                             
+  fdisk                               libev4t64                       libqt5charts5                   network-manager-vpnc-gnome              python3.14-tk                                  
+  fern-wifi-cracker                   libevdev2                       libqt5core5t64                  nfs-common                              python3.14-venv                                
+  ffuf                                libevent-2.1-7t64               libqt5dbus5t64                  nftables                                qt5-gtk-platformtheme                          
+  fierce                              libevent-core-2.1-7t64          libqt5designer5                 nginx                                   qt5ct                                          
+  figlet                              libevent-openssl-2.1-7t64       libqt5gui5t64                   nginx-common                            qt6-base-dev-tools                             
+  findutils                           libevent-pthreads-2.1-7t64      libqt5help5                     ngrep                                   qt6-gtk-platformtheme                          
+  firebird4.0-common                  libewf2                         libqt5network5t64               node-normalize.css                      qt6-qpa-plugins                                
+  firebird4.0-common-doc              libexif12                       libqt5opengl5t64                notus-scanner                           qt6-translations-l10n                          
+  firefox-esr                         libexiv2-28                     libqt5positioning5              nsis                                    qtbase5-dev-tools                              
+  firmware-amd-graphics               libexiv2-data                   libqt5printsupport5t64          nsis-common                             qterminal                                      
+  firmware-ath9k-htc                  libexo-2-0                      libqt5qml5                      ntfs-3g                                 qterminal-l10n                                 
+  firmware-atheros                    libexpat1                       libqt5qmlmodels5                ocl-icd-libopencl1                      qtermwidget-data                               
+  firmware-brcm80211                  libexpat1-dev                   libqt5quick5                    offsec-awae-python2                     qttranslations5-l10n                           
+  firmware-carl9170                   libext2fs2t64                   libqt5quickwidgets5             onboard                                 qtwayland5                                     
+  firmware-intel-graphics             libfaad2                        libqt5sql5-sqlite               onboard-common                          racc                                           
+  firmware-intel-misc                 libfalcosecurity0t64            libqt5sql5t64                   onboard-data                            radare2          
+
+
+
+
+ 8.metaFramework		nmap -sV <TARGET_IP>		msfconsole		search <SERVICE_OR_CVE>		   info <MODULE_NAME>		use <MODULE_NAME>	 	 show options		set RHOSTS <TARGET_IP>		run		sessions	  sessions -i <SESSION_ID> 	    whoami		hostname
+|  id valid target	exit write remedy
+
+
+
+                              
+  firmware-intel-sound                libfbclient2                    libqt5svg5                      openconnect                             rake                                           
+  firmware-iwlwifi                    libfcgi-bin                     libqt5test5t64                  openjdk-21-jre                          rdesktop                                       
+  firmware-libertas                   libfcgi-perl                    libqt5waylandclient5            openjdk-21-jre-headless                 read-edid                                      
+  firmware-linux                      libfcgi0t64                     libqt5waylandcompositor5        openocd                                 rebind                                         
+  firmware-linux-free                 libfdisk1                       libqt5webchannel5               opensc                                  recon-ng                                       
+  firmware-linux-nonfree              libffado2                       libqt5webengine-data            opensc-pkcs11                           recordmydesktop                                
+  firmware-marvell-prestera           libfftw3-single3                libqt5webengine5                openssh-client                          redis-server                                   
+  firmware-mediatek                   libfido2-1                      libqt5webenginecore5            openssh-client-ssh1                     redis-tools                                    
+  firmware-misc-nonfree               libfile-desktopentry-perl       libqt5webenginewidgets5         openssh-server                          responder                                      
+  firmware-nvidia-graphics            libfile-fcntllock-perl          libqt5widgets5t64               openssh-sftp-server                     rfkill                                         
+  firmware-realtek                    libfile-mimeinfo-perl           libqt5xml5t64                   openssl                                 ristretto                                      
+  firmware-sof-signed                 libflac14                       libqt6core6t64                  openssl-provider-legacy                 rpcsvc-proto                                   
+  firmware-ti-connectivity            libflashrom1                    libqt6dbus6                     openvas-scanner                         rpm                                            
+  flac                                libflite1                       libqt6gui6                      openvpn                                 rpm-common                                     
+  flashrom                            libfluidsynth3                  libqt6multimedia6               ophcrack                                rpm2cpio                                       
+  fontconfig                          libfmt10                        libqt6network6                  ophcrack-cli                            rsync                                          
+  fonts-cantarell                     libfontbox-java                 libqt6opengl6                   orca                                    rtkit                                          
+  fonts-dejavu                        libfreeaptx0                    libqt6openglwidgets6            os-prober                               ruby-activesupport                             
+
+Continue? [Y/n] y
+Get:1 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 google-chrome-stable amd64 155.0.8059.39-1 [144 MB]
+Get:2 http://kali.download/kali kali-rolling/main amd64 rpcsvc-proto amd64 1.4.4-1 [63.4 kB]
+Get:3 http://kali.download/kali kali-rolling/main amd64 libc-dev-bin amd64 2.43-6 [39.5 kB]              
+Get:4 http://http.kali.org/kali kali-rolling/main amd64 libcrypt1 amd64 1:4.5.2+20251210-1 [100 kB]      
+Get:5 http://http.kali.org/kali kali-rolling/main amd64 libcrypt-dev amd64 1:4.5.2+20251210-1 [130 kB]
+Get:6 http://kali.download/kali kali-rolling/main amd64 libc6-dev amd64 2.43-6 [2,070 kB]               
+Get:8 http://mirrors.esto.network/kali kali-rolling/main amd64 libc-gconv-modules-extra amd64 2.43-6 [1,096 kB]                                                                             
+Get:7 http://kali.download/kali kali-rolling/main amd64 libc6-i386 amd64 2.43-6 [2,609 kB]                                                                                                  
+Get:9 http://mirrors.esto.network/kali kali-rolling/main amd64 libc6 amd64 2.43-6 [1,867 kB]                                                                                                
+Get:19 http://mirrors.esto.network/kali kali-rolling/main amd64 liblzma-dev amd64 5.8.4-1 [391 kB]                                                                                          
+Get:22 http://http.kali.org/kali kali-rolling/main amd64 libzstd1 amd64 1.5.7+dfsg-4 [304 kB]                                                                                               
+Get:24 http://mirrors.esto.network/kali kali-rolling/main amd64 libssl3t64 amd64 3.6.4-1 [2,614 kB]                                                                                         
+Get:30 http://mirrors.esto.network/kali kali-rolling/main amd64 systemd-sysv amd64 262-1 [41.6 kB]                                                                                          
+Get:33 http://mirrors.esto.network/kali kali-rolling/main amd64 systemd-timesyncd amd64 262-1 [73.8 kB]                                                                                     
+Get:36 http://http.kali.org/kali kali-rolling/main amd64 init-system-helpers all 1.69+nmu1+kali1 [38.8 kB]                                                                                  
+Get:47 http://http.kali.org/kali kali-rolling/main amd64 libtext-charwidth-perl amd64 0.04-12+b1 [9,344 B]                                                                                  
+Get:53 http://mirrors.esto.network/kali kali-rolling/main amd64 perl-base amd64 5.42.3-1 [1,878 kB]                                                                                         
+Get:55 http://http.kali.org/kali kali-rolling/main amd64 libintl-xs-perl amd64 1.37-1+b1 [15.2 kB]                                                                                          
+Get:56 http://http.kali.org/kali kali-rolling/main amd64 libcommon-sense-perl amd64 3.75-3+b7 [23.0 kB]   
