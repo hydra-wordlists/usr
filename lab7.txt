@@ -1,0 +1,6 @@
+1. go to api and create api > rest api > name > create
+2. go to the api and create resource with a name, in that
+   resource create a method get/post with mock and edit that integration response
+   {"message":"pari"}
+3. deploy api with a new stage name
+4. verify previlage with stages > invoke url with /resource_name

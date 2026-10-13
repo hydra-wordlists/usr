@@ -1,0 +1,7 @@
+1. create a s3 with block public access unchecked and versioning on
+2. upload a file twice
+3. delete the file while "show version" is off
+4. check cloudtrail to find the deletion log (finding cause/problem)
+5. come back to s3 and check "block the public access" option
+6. recover the deleted file by deleting the file which has "delete marker"
+   file will be recovered and vuln will be avoided

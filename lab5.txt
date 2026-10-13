@@ -1,0 +1,10 @@
+1. create vpc in vpc and more with a name
+2. create ec2 with key pair disabled , use our vpc , create sg with a name and auto assign ip enabled
+3. create rds full configuration , use MySQL , dbname , master password , use our vpc , 
+   make security group, add kms key in adittional config
+4. change sg of dbms with sg of ec2
+5. connect ec2
+6. sudo yum install mariadb105 -y
+   wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem 
+   paste code from rds connectivity removing theverify identity part
+
