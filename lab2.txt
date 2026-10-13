@@ -1,0 +1,12 @@
+1. create role with aws services > ec2 , add s3readonly policie also
+2. create ec2 with name, keyless, auto assign ip enabled
+3. on ec2 > actions > security > modify role > add role
+4. create a normal s3 and add a file in it
+5. connect ec2
+6. aws s3 ls
+aws s3 ls s3://<s3name>/
+aws s3 cp s3://YOUR-BUCKET-NAME/file.txt -
+echo "trial" > trial.txt
+aws s3 cp trial.txt s3://<s3name>/
+
+
