@@ -1,0 +1,296 @@
+curl -L https://raw.githubusercontent.com/hydra-wordlists/usr/main/lab1.txt
+
+Q1:
+Create IAM user with providing user access to aws console
+
+Custom password: LabQ1_pass
+Attach policy directly: Give the permission like S3ReadOnlyAccess
+IAM User - LabQ1
+Download the file having the details of password and all.
+
+Create IAM group, attach user and policy.
+LabQ1_pass (file has been created)
+
+IAM Group - LabQ1G
+From the link in file login as the created user and try to create or do something, it will show you can't.
+
+Q2:
+
+Create a role,
+
+Trusted entity: AWS Service, Use case: EC2
+
+with some permission like S3ReadOnlyAccess
+
+IAM Role - LabQ2
+EC2 Instace - Key Pair - LabPairing
+
+EC2 Instace - Q2 EC2
+
+From EC2 connect and type the command “ aws sts get-caller-identity ”
+it will prove we have set the iam role for that pc.
+
+Q3:
+
+S3 bucket - labq3bucket
+
+While creating, Enable bucket versioning
+
+Upload a text file to it.
+
+Once that is locally updated, reupload the file. It will show the multiple updates.(inside version)
+
+Q4:
+
+Go to KMS, create key
+
+Alias - LabQ4Alias
+
+Used all default once. Left holder and keeper as none.
+
+S3 bucket - labq4bucket
+
+Go to that bucket and take properties, go to default encryption
+Change: encryption type to SSE-KMS, and choose from your keys, save.
+Upload a file into it. And check its server-side encryption settings.
+
+Q5:
+
+First, create a VPC and more lab5.
+Your VPC - Lab5-vpc
+
+EC2 Instance - Lab5 EC2
+Assign keypair,
+
+Edit network setting: choose our VPC.
+Subnet: Any thats public
+Auto assign: enable
+Firewall : create security grp
+
+Securty grp name: Lab5EC2sg
+
+Database Identifier - Lab5DB
+
+Go to RDS, databases, create
+
+Mysql, full config
+
+admin - Password- admin123 (rest you will know)
+
+Firewall : create security grp
+
+Securty grp name: Lab5RDSsg
+
+Additional configuration: AWS KMS Key: chose what you own.
+
+Copy security grp id: Lab5EC2sg - go to
+
+Lab5RDSsg edit inbound, delete- mysql, custom paste id, save
+
+Go to Lab5 EC2 and connect
+
+-   sudo yum install mariadb105 -y
+
+-   wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
+
+Go to rds copy 2nd link and remove the part after -p “--ssl-mode=VERIFY_IDENTITY ”
+
+Q6: Do the full 5th question, then.
+
+-- 91. Create the college database
+
+CREATE DATABASE college;
+
+-- 92. Select the college database
+
+USE college;
+
+-- 93. Create a students table
+
+CREATE TABLE students (
+
+id INT PRIMARY KEY,
+
+name VARCHAR(50),
+
+department VARCHAR(50)
+
+);
+
+-- 94. Insert sample student records
+
+INSERT INTO students (id, name, department)
+
+VALUES
+
+(1, 'Arun', 'BCA'),
+
+(2, 'Meera', 'BBA'),
+
+(3, 'Rahul', 'BCA'),
+
+(4, 'Anu', 'BCom');
+
+-- 95. Display all records to verify INSERT
+
+SELECT * FROM students;
+
+-- 96. Update one student's department
+
+UPDATE students
+
+SET department = 'MCA'
+
+WHERE id = 1;
+
+-- 97. Verify the updated value
+
+SELECT * FROM students;
+
+-- 98. Delete one test record
+
+DELETE FROM students
+
+WHERE id = 4;
+
+-- 99. Verify that only the intended record was deleted
+
+SELECT * FROM students;
+
+-- 100. Verify the database and table
+
+SHOW DATABASES;
+
+SHOW TABLES;
+
+-- 101. Exit the MySQL prompt
+
+EXIT;
+
+Q7:
+
+Create lambda:
+
+Go down paste nodejs code:
+
+export const handler = async (event) => {
+
+const students = [
+
+{ id: 1, name: "Arun" },
+
+{ id: 2, name: "Meera" }
+
+];
+
+return {
+
+statusCode: 200,
+
+headers: { "Content-Type": "application/json" },
+
+body: JSON.stringify(students)
+
+};
+
+};
+
+Lambda - LamdaFn7
+
+Create API - Rest Api
+
+API Name - APIQ7
+
+Take it, create resourece:
+
+Resource- Lab7
+
+Create methed - GET - proxy integration tick
+
+Take GET and test it - Deploy.
+
+Invoke URL: https://p6pe1r9lc4.execute-api.ap-south-1.amazonaws.com/Get7 + /lab8=7
+
+Q8:
+
+EC2, create instance:
+
+EC2: Lab8EC2
+
+Key pair: LabPairing
+
+Take and go down,
+
+“Tags”: Manage tags: Key: Lab8Tag, Value: Lab8Value.
+
+Take cloudtrial
+
+Take event history, get details from those to write
+
+Take cloudwatch
+
+Alarms,
+
+Select metric: browse: EC2
+
+From EC2 instance copy: Instance id to filter
+
+Take the one which says “CPU Utilization”, select metric.
+
+Delete notification part
+
+Alarm - CloudAlarm
+
+Create.
+
+Take EC2 and Connect.
+
+Ping 8.8.8.8
+
+Cloud Alarm “OK”
+
+Q9:
+
+S3 - Bucket - lab-9bucket
+
+Uncheck all the Block public access
+
+Bucket versioning Enable.
+
+Upload a file, reupload same
+
+After that check versioning.
+
+Delete the file, file will be gone.
+
+In versioning we will see 3 files, in which one is accessible (looks normal)
+
+Delete that file. So the deleted file will come back.
+
+Theory:
+
+Incident Response Phases
+
+-   Phase 1: Detection
+
+-   An automated alert flagged unauthenticated public downloads of sensitive data from IP 117.216.43.193.
+
+-   Phase 2: Analysis
+
+-   CloudTrail Event history confirmed the root user executed PutBucketPolicy on bucket s3-issue-123, applying a wildcard policy that allowed public read access.
+
+-   Phase 3: Containment
+
+-   Immediately enabled S3 Block Public Access on the bucket to halt active data leakage.
+
+-   Phase 4: Eradication
+
+-   Deleted the insecure bucket policy statement granting public s3:GetObject permissions.
+
+-   Phase 5: Recovery
+
+-   Confirmed public requests return AccessDenied while authorized access works. Checked S3 Versioning to verify data integrity and roll back any altered objects.
+
+-   Phase 6: Lessons Learned
+
+-   Enforce Block Public Access at the account level, restrict root account usage via IAM least privilege, enable S3 Versioning, and configure CloudWatch alarms for policy updates.
