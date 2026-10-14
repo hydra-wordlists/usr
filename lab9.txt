@@ -5,3 +5,16 @@
 5. come back to s3 and check "block the public access" option
 6. recover the deleted file by deleting the file which has "delete marker"
    file will be recovered and vuln will be avoided
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::s2-issue/*"
+        }
+    ]
+}
