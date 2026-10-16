@@ -1,5 +1,0 @@
-1. create a iam user
-2. create an kms key with the iam user allocated in 2 places
-3. create a s3 bucket default encryption with sse-kms and the kms key
-4. verify by showing the key in properties
-5. identify assigned iams
