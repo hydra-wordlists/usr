@@ -1,8 +1,0 @@
-1. create a sample ec2 , create a tag in it 
-2. go to cloudtrail > event history > clear filters > 
-   filter with filtertype-evenetname and tag-createtags and inspect
-   (note time name source id ip)
-3. go to cloudewatch > alarms > create alarms > select metrics > ec2 > 
-   pre-instance metrics > filter our ec2 id > select cpu utilization > 
-   fix a threshhold > next > create new topic > name > confirm
-4. ping ec2 and wait in cloudwatch
