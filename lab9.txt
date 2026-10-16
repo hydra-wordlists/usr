@@ -1,20 +1,21 @@
-sudo apt install -y mosquitto mosquitto-clients
-sudo systemctl start/enable/status mosquito
+ip addr 
+ip route
 
-sudo iptables-save | sudo tee ~/iptables-backup.txt
+sudo apt update 
+sudo apt install nmap
+nmap --version
+
+nmap -sT -sV 127.0.0.1
 
 t1:
-mosquitto_sub -h localhost -p 1883 -t 'smartfactory/machine01/#' -v
+python3 -m http.server 8080 --bind 127.0.0.1
 
 t2:
-mosquitto_pub -h localhost -p 1883 -t 'smartfactory/machine01/temperature' -m '24.00'
+nmap -sT -sV -p 8080 127.0.0.1
 
-mosquitto_pub -h localhost -p 1883 -t 'smartfactory/machine01/temperature' -m '99.99'
-
-mosquitto_pub -h localhost -p 1883 -t 'smartfactory/machine01/temperature' -m '24.00'
-
-
-sudo iptables -I INPUT 1 -p tcp --dport 1883 -j DROP
-sudo iptables -L INPUT -n -v --line-numbers
-sudo iptables-restore < ~/iptables-backup.txt
-sudo iptables -L INPUT -n -v --line-numbers
+Security Recommendations
+- Disable services that are not needed.
+- Restrict management interfaces to authorized hosts.
+- Apply host firewall rules and network segmentation.
+- Remove default credentials and use strong authentication where applicable.
+- Keep software updated and monitor logs for unexpected connections.
