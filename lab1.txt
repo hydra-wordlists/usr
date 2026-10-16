@@ -1,8 +1,0 @@
-1. create empty group
-2. create user
-3. add user to group
-4. make policy s3 and with listbucket , listallmybuckets and  getobject
-5. add that policy to the group
-6. create a sample bucket
-7. log in as the user/simulate
-8. verify permissions
