@@ -1,0 +1,15 @@
+ip addr
+ip route
+ss -tulpen
+nmap -sV 127.0.0.1
+
+DHT22 Sensor → ESP32 → Wi-Fi → MQTT Broker → Kali Monitoring Client
+
+Attack surface	           Possible security concern
+Wi-Fi	                   Unauthorized access
+MQTT broker	           Unauthorized publishing
+Firmware	           Software vulnerabilities
+Credentials	           Weak or exposed passwords
+OTA updates	           Untrusted updates
+Debug interface	           Unauthorized device access
+Monitoring application	   Weak authentication

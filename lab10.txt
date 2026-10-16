@@ -1,0 +1,98 @@
+1. create a esp32 in wokwi
+2. add dht22
+3. connect VCC-3V3, SDA-esp15, GDN-GDN1
+4. add libraries DHT sensor library, PubSubClient
+5. paste code in .ino
+6. start esp32
+7. kali:
+   mosquitto_sub -h test.mosquitto.org -p 1883 -t 'unknown/#' -v
+8. unencrypted MQTT communication and the lack of client authentication
+   security improvements: TLS encryption, authentication, topic-level ACLs, and monitoring.
+
+
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include "DHT.h"
+
+#define DHTPIN 15
+#define DHTTYPE DHT22
+
+const char* WIFI_SSID = "Wokwi-GUEST";
+const char* MQTT_SERVER = "test.mosquitto.org";
+
+const char* TEMP_TOPIC = "unknown/temperature";
+const char* HUM_TOPIC = "unknown/humidity";
+const char* STATUS_TOPIC = "unknown/status";
+
+WiFiClient espClient;
+PubSubClient mqtt(espClient);
+DHT dht(DHTPIN, DHTTYPE);
+
+unsigned long lastPublish = 0;
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+
+  WiFi.begin(WIFI_SSID, "");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+  }
+
+  Serial.println("WiFi connected!");
+
+  mqtt.setServer(MQTT_SERVER, 1883);
+
+  while (!mqtt.connected()) {
+    if (mqtt.connect("unknown")) {
+      Serial.println("MQTT connected!");
+      mqtt.publish(STATUS_TOPIC, "ONLINE");
+    } else {
+      delay(2000);
+    }
+  }
+}
+
+void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    WiFi.reconnect();
+    delay(1000);
+    return;
+  }
+
+  if (!mqtt.connected()) {
+    if (!mqtt.connect("unknown")) {
+      delay(2000);
+      return;
+    }
+    mqtt.publish(STATUS_TOPIC, "ONLINE");
+  }
+
+  mqtt.loop();
+
+  if (millis() - lastPublish >= 3000) {
+    lastPublish = millis();
+
+    float t = dht.readTemperature();
+    float h = dht.readHumidity();
+
+    if (isnan(t) || isnan(h)) {
+      Serial.println("Sensor error!");
+      return;
+    }
+
+    char temp[16], hum[16];
+    snprintf(temp, sizeof(temp), "%.2f", t);
+    snprintf(hum, sizeof(hum), "%.2f", h);
+
+    mqtt.publish(TEMP_TOPIC, temp);
+    mqtt.publish(HUM_TOPIC, hum);
+
+    Serial.print("Temperature: ");
+    Serial.print(temp);
+    Serial.print(" C, Humidity: ");
+    Serial.print(hum);
+    Serial.println(" %");
+  }
+}

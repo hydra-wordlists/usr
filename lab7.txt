@@ -1,0 +1,35 @@
+sudo apt install -y mosquitto mosquitto-clients
+sudo systemctl start mosquitto
+sudo systemctl status mosquitto
+
+#part1
+
+t1:
+sudo tcpdump -i lo -nn -s0 -w mqtt-lab.pcap port 1883
+
+t2:
+mosquitto_sub -h localhost -t 'smartfactory/machine01/#' -v
+
+t3:
+mosquitto_pub -h localhost -t 'smartfactory/machine01/temperature' -m '24.00'
+mosquitto_pub -h localhost -t 'smartfactory/machine01/humidity' -m '40.00'
+
+
+wireshark ~/mqtt-lab.pcap
+get mqtt connect sub pub packets
+
+
+#part2
+
+t1:
+coap-server-openssl -A 127.0.0.1 -p 5683
+
+t2:
+sudo tcpdump -i lo -nn -s0 -w coap-lab.pcap udp port 5683
+
+t3:
+coap-client-openssl -m get coap://127.0.0.1:5683/
+
+
+wireshark coap-lab.pcap
+get GET UDP packets

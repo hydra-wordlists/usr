@@ -1,0 +1,24 @@
+cd ~/firmware-lab/_firmware.bin.extracted
+
+find . -type f \( -name '*.conf' -o -name '*.ini' -o -name '*.json' -o -name '*.xml' -o -name '*.pem' -o -name '*.key' \) | head -n 100      //Find configuration and key files
+
+grep -RniE 'password|passwd|username|user=|token|api[_-]?key|secret|ssid|mqtt' . 2>/dev/null | head -n 100           //Search for credential-related keywords
+
+grep -RniE 'https?://|mqtt://|coap://' . 2>/dev/null | head -n 100          //Search for service endpoints and URLs
+
+find . -type f -exec sh -c 'strings -n 6 "$1" 2>/dev/null | grep -iE "password|token|secret|api[_-]?key"' _ {} \; 2>/dev/null | head -n 100    //Search readable strings
+
+
+
+
+
+
+
+
+Finding	                                                  Classification
+Password-related code and root username	                  Credential
+Token-related strings in binaries	                  Credential / token indicator
+OpenWrt .pem file	                                  Key/certificate
+OpenWrt URLs and repository links	                  Endpoint
+Configuration files (.conf, .json)	                  Network configuration
+Authentication messages and ordinary program strings	  Benign string

@@ -1,0 +1,18 @@
+terminal 1:
+sudo apt update
+sudo apt install -y mosquitto mosquitto-clients
+sudo systemctl enable --now mosquitto
+systemctl status mosquitto --no-pager
+mosquitto_sub -h localhost -p 1883 -t 'smartfactory/machine01/#' -v
+
+terminal 2:
+mosquitto_pub -h localhost -p 1883 \
+-t 'smartfactory/machine01/temperature' -m '24.00'
+
+mosquitto_pub -h localhost -p 1883 \
+-t 'smartfactory/machine01/humidity' -m '40.00'
+
+terminal 3:
+ss -ltnp | grep 1883
+sudo tcpdump -i lo -nn port 1883
+again terminal 2

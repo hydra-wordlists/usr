@@ -1,0 +1,14 @@
+sudo apt update
+sudo apt install -y libcoap3-bin
+
+which coap-client-openssl
+ls /usr/bin/coap-client*
+
+t1:
+coap-server-openssl -A 127.0.0.1 -p 5683
+
+t2:
+coap-client-openssl -m get coap://127.0.0.1:5683/
+
+t3:
+sudo tcpdump -i lo -nn udp port 5683
