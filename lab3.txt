@@ -1,5 +1,0 @@
-1. create s3 with name and versioning enabled and check block public access(on)
-2. upload a sample.txt
-3. rewrite and upload sample.txt
-4. check versioning by enableing show version
-5. check txt link in another tab and using open 
