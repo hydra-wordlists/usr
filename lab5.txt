@@ -21,3 +21,21 @@ find _firmware.bin.extracted -type f -exec file {} \; | head -n 30     //list fi
 
 
 squashFS is a filesystem
+
+result of find _firmware.bin.extracted -type f -exec file {} \; | head -n 30 
+File	       -   Type reported
+0.squashfs	 -    Squashfs filesystem, little endian, version 4.0, xz compressed, 6109442 bytes, 1290 inodes
+sbin/procd, sbin/netifd, sbin/uci, sbin/init  -	ELF 64-bit LSB executable, x86-64, dynamically linked (compiled programs)
+sbin/sysupgrade, sbin/firstboot, sbin/fw4	 - POSIX shell script, ASCII text executable (readable scripts)
+
+overall final Findings:
+
+Embedded filesystem: SquashFS, xz-compressed
+Architecture: x86-64
+Libraries: the programs use the musl C library (/lib/ld-musl-x86_64.so.1)
+Contents: system programs, shell scripts and other router files
+
+Note: the find ... -exec file {} \; | head command may print many terminated by signal 13 lines. They are harmless. They appear because head stops after 30 lines while find is still working. Add 2>/dev/null to hide them.
+
+RESULT
+Static firmware analysis was performed, and the embedded SquashFS filesystem and its components were identified and documented.
