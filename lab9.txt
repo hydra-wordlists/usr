@@ -1,3 +1,4 @@
+Aim:To identify network-connected devices and services in an authorized lab environment, assess exposed ports, and recommend security controls
 ip addr 
 ip route
 
