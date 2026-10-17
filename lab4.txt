@@ -1,3 +1,4 @@
+Aim:Establish CoAP client-server communication, perform GET/POST operations and observe the UDP-based protocol traffic.
 sudo apt update
 sudo apt install -y libcoap3-bin
 
