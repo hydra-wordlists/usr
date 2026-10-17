@@ -9,8 +9,24 @@ grep -RniE 'https?://|mqtt://|coap://' . 2>/dev/null | head -n 100          //Se
 find . -type f -exec sh -c 'strings -n 6 "$1" 2>/dev/null | grep -iE "password|token|secret|api[_-]?key"' _ {} \; 2>/dev/null | head -n 100    //Search readable strings
 
 
+Classified findings:
 
+File	-Evidence	Class
+etc/apk/keys/openwrt-25.12.pem -  .pem key file	Key / certificate
+www/.../view/system/dropbear.js -	SSH password login enabled by default	Network configuration
+www/.../view/network/wireless.js -	New Wi-Fi defaults to SSID OpenWrt, no encryption	Network configuration
+sbin/sysupgrade	Accepts - http:// update locations	Endpoint
+Interface files and programs - password, token, ssid as labels and function names	Benign string
 
+Observation: Keyword matches were only indicators. Each was checked in context, and no hardcoded username, password, API key or token was found. Only the first 100 lines of each search were checked.
+
+RESULT
+
+The firmware was reviewed for sensitive information. No hardcoded credentials were found in the lines checked. The indicators found (SSH password login, open default Wi-Fi, http update support, a .pem key file) were documented.
+
+SECURITY RELEVANCE / REMEDIATION
+
+Use secure provisioning and storage for secrets, rotate keys, and remove default and hardcoded credentials.
 
 
 
